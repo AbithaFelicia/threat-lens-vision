@@ -12,7 +12,7 @@ import { EmptyState, SeverityBadge, fmtTime } from "@/components/tl";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/logs")({
-  validateSearch: (s: Record<string, unknown>): { q?: string } => ({ q: typeof s.q === "string" ? s.q : undefined }),
+  validateSearch: (s: Record<string, unknown>): { q?: string | undefined } => ({ q: typeof s["q"] === "string" ? s["q"] : undefined }),
   head: () => ({
     meta: [
       { title: "Log Explorer — ThreatLens" },
@@ -37,7 +37,7 @@ function parseFile(text: string, name: string): Partial<LogRow>[] {
     const j = JSON.parse(text);
     return Array.isArray(j) ? j : [j];
   }
-  const [head, ...lines] = text.trim().split(/\r?\n/);
+  const [head = "", ...lines] = text.trim().split(/\r?\n/);
   const cols = head.split(",").map((c) => c.trim());
   return lines.filter(Boolean).map((l) => {
     const v = l.split(",");
@@ -70,10 +70,10 @@ function LogsPage() {
 
   const handleFile = async (file?: File) => {
     if (!file) return;
-    if (!/\.(csv|json)$/i.test(file.name)) return toast.error("Only .csv or .json files are supported");
+    if (!/\.(csv|json)$/i.test(file.name)) { toast.error("Only .csv or .json files are supported"); return; }
     try {
       const rows = parseFile(await file.text(), file.name.toLowerCase());
-      if (!rows.length) return toast.error("File has no rows");
+      if (!rows.length) { toast.error("File has no rows"); return; }
       upload.mutate(rows);
     } catch {
       toast.error("Could not parse file");
@@ -227,7 +227,7 @@ function LogsPage() {
                 </dl>
                 <pre className="whitespace-pre-wrap break-all rounded-md border bg-background p-3 font-mono text-[11px]">{sel.message}</pre>
                 {sel.incident_id && (
-                  <Link to="/incidents/$id" params={{ id: sel.incident_id }} hash={incidents.find((i) => i.id === sel.incident_id)?.stages.find((s) => s.stage === sel.stage)?.id} className="block rounded-md bg-primary px-3 py-2 text-center text-xs font-semibold text-primary-foreground">
+                  <Link to="/incidents/$id" params={{ id: sel.incident_id }} hash={incidents.find((i) => i.id === sel.incident_id)?.stages.find((s) => s.stage === sel.stage)?.id ?? ""} className="block rounded-md bg-primary px-3 py-2 text-center text-xs font-semibold text-primary-foreground">
                     Open {sel.incident_id} · {stageLabel(sel.stage)} stage →
                   </Link>
                 )}

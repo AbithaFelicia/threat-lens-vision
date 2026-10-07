@@ -194,7 +194,7 @@ function IncidentView({ inc }: { inc: Incident }) {
                     <li key={f.name}>
                       <div className="flex justify-between text-xs"><span>{f.name}</span><span className="font-mono text-muted-foreground">{(f.contribution * 100).toFixed(0)}%</span></div>
                       <div className="mt-1 h-1.5 rounded-full bg-muted">
-                        <div className="h-full rounded-full bg-primary" style={{ width: `${(f.contribution / inc.why_flagged.features[0].contribution) * 100}%` }} />
+                        <div className="h-full rounded-full bg-primary" style={{ width: `${(f.contribution / inc.why_flagged.features[0]!.contribution) * 100}%` }} />
                       </div>
                     </li>
                   ))}

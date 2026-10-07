@@ -422,9 +422,9 @@ function incidentLogs(): LogRow[] {
   for (const inc of incidents) {
     for (const s of inc.stages) {
       for (const e of s.evidence) {
-        const user = inc.entities.users[0];
-        const host = e.raw.match(/host=([\w-]+)/)?.[1] ?? inc.entities.hosts[0];
-        const ip = e.raw.match(/(?:src|dst)=([\d.]+)/)?.[1] ?? inc.entities.ips[0];
+        const user = inc.entities.users[0] ?? "";
+        const host = e.raw.match(/host=([\w-]+)/)?.[1] ?? inc.entities.hosts[0] ?? "";
+        const ip = e.raw.match(/(?:src|dst)=([\d.]+)/)?.[1] ?? inc.entities.ips[0] ?? "";
         out.push({
           id: e.log_id,
           timestamp: e.timestamp,
@@ -454,8 +454,8 @@ function buildLogs(): LogRow[] {
   while (rows.length < 300) {
     id++;
     if (used.has(id)) continue;
-    const u = USERS[Math.floor(r() * USERS.length)];
-    const b = BENIGN[Math.floor(r() * BENIGN.length)];
+    const u = USERS[Math.floor(r() * USERS.length)]!;
+    const b = BENIGN[Math.floor(r() * BENIGN.length)]!;
     const day = Math.floor(r() * 7);
     const hour = 8 + Math.floor(r() * 10);
     const ts = start + day * 864e5 + hour * 36e5 + Math.floor(r() * 36e5);
@@ -556,7 +556,7 @@ export function buildEntity(type: EntityType, id: string): EntityProfile {
     if (related.length && i >= 10) s = Math.min(0.99, s + (i - 9) * 0.2);
     return { date: d, score: Number(s.toFixed(2)) };
   });
-  const risk = related.length ? Math.max(...related.map((rid) => incidents.find((x) => x.id === rid)!.risk_score)) : Math.round(series[13].score * 100);
+  const risk = related.length ? Math.max(...related.map((rid) => incidents.find((x) => x.id === rid)!.risk_score)) : Math.round(series[13]!.score * 100);
   return { type, id, display: id, risk, baseline: BASELINES[key] ?? genericBaseline(type, id), anomaly_series: series, related_incidents: related };
 }
 
