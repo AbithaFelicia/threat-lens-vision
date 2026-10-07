@@ -10,33 +10,102 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as LogsRouteImport } from './routes/logs'
+import { Route as MetricsRouteImport } from './routes/metrics'
+import { Route as GraphIncidentIdRouteImport } from './routes/graph.$incidentId'
+import { Route as IncidentsIdRouteImport } from './routes/incidents.$id'
+import { Route as EntitiesTypeIdRouteImport } from './routes/entities.$type.$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LogsRoute = LogsRouteImport.update({
+  id: '/logs',
+  path: '/logs',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MetricsRoute = MetricsRouteImport.update({
+  id: '/metrics',
+  path: '/metrics',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GraphIncidentIdRoute = GraphIncidentIdRouteImport.update({
+  id: '/graph/$incidentId',
+  path: '/graph/$incidentId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IncidentsIdRoute = IncidentsIdRouteImport.update({
+  id: '/incidents/$id',
+  path: '/incidents/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EntitiesTypeIdRoute = EntitiesTypeIdRouteImport.update({
+  id: '/entities/$type/$id',
+  path: '/entities/$type/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/logs': typeof LogsRoute
+  '/metrics': typeof MetricsRoute
+  '/graph/$incidentId': typeof GraphIncidentIdRoute
+  '/incidents/$id': typeof IncidentsIdRoute
+  '/entities/$type/$id': typeof EntitiesTypeIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/logs': typeof LogsRoute
+  '/metrics': typeof MetricsRoute
+  '/graph/$incidentId': typeof GraphIncidentIdRoute
+  '/incidents/$id': typeof IncidentsIdRoute
+  '/entities/$type/$id': typeof EntitiesTypeIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/logs': typeof LogsRoute
+  '/metrics': typeof MetricsRoute
+  '/graph/$incidentId': typeof GraphIncidentIdRoute
+  '/incidents/$id': typeof IncidentsIdRoute
+  '/entities/$type/$id': typeof EntitiesTypeIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/logs'
+    | '/metrics'
+    | '/graph/$incidentId'
+    | '/incidents/$id'
+    | '/entities/$type/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/logs'
+    | '/metrics'
+    | '/graph/$incidentId'
+    | '/incidents/$id'
+    | '/entities/$type/$id'
+  id:
+    | '__root__'
+    | '/'
+    | '/logs'
+    | '/metrics'
+    | '/graph/$incidentId'
+    | '/incidents/$id'
+    | '/entities/$type/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  LogsRoute: typeof LogsRoute
+  MetricsRoute: typeof MetricsRoute
+  GraphIncidentIdRoute: typeof GraphIncidentIdRoute
+  IncidentsIdRoute: typeof IncidentsIdRoute
+  EntitiesTypeIdRoute: typeof EntitiesTypeIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +117,51 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/logs': {
+      id: '/logs'
+      path: '/logs'
+      fullPath: '/logs'
+      preLoaderRoute: typeof LogsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/metrics': {
+      id: '/metrics'
+      path: '/metrics'
+      fullPath: '/metrics'
+      preLoaderRoute: typeof MetricsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/graph/$incidentId': {
+      id: '/graph/$incidentId'
+      path: '/graph/$incidentId'
+      fullPath: '/graph/$incidentId'
+      preLoaderRoute: typeof GraphIncidentIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/incidents/$id': {
+      id: '/incidents/$id'
+      path: '/incidents/$id'
+      fullPath: '/incidents/$id'
+      preLoaderRoute: typeof IncidentsIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/entities/$type/$id': {
+      id: '/entities/$type/$id'
+      path: '/entities/$type/$id'
+      fullPath: '/entities/$type/$id'
+      preLoaderRoute: typeof EntitiesTypeIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  LogsRoute: LogsRoute,
+  MetricsRoute: MetricsRoute,
+  GraphIncidentIdRoute: GraphIncidentIdRoute,
+  IncidentsIdRoute: IncidentsIdRoute,
+  EntitiesTypeIdRoute: EntitiesTypeIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
