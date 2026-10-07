@@ -183,7 +183,7 @@ function LiveFeed() {
   useEffect(() => {
     if (!on || mode === "clean") return;
     const t = setInterval(() => {
-      const tpl = FEED_TEMPLATES[Math.floor(Math.random() * FEED_TEMPLATES.length)];
+      const tpl = FEED_TEMPLATES[Math.floor(Math.random() * FEED_TEMPLATES.length)]!;
       n.current++;
       setItems((p) => [{ id: n.current, ts: new Date().toISOString(), ...tpl }, ...p].slice(0, 12));
     }, 3000);

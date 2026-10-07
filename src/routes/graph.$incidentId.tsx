@@ -46,9 +46,9 @@ const nodeTypes = { entity: EntityNode };
 function layout(g: IncidentGraph) {
   const rank: Record<string, number> = {};
   g.nodes.forEach((n) => (rank[n.id] = 0));
-  for (let k = 0; k < g.nodes.length; k++) for (const e of g.edges) rank[e.target] = Math.max(rank[e.target], rank[e.source] + 1);
+  for (let k = 0; k < g.nodes.length; k++) for (const e of g.edges) rank[e.target] = Math.max(rank[e.target] ?? 0, (rank[e.source] ?? 0) + 1);
   const cols: Record<number, string[]> = {};
-  g.nodes.forEach((n) => (cols[rank[n.id]] ??= []).push(n.id));
+  g.nodes.forEach((n) => (cols[rank[n.id] ?? 0] ??= []).push(n.id));
   const pos: Record<string, { x: number; y: number }> = {};
   Object.entries(cols).forEach(([c, ids]) => ids.forEach((id, i) => (pos[id] = { x: Number(c) * 260, y: i * 130 + (Number(c) % 2) * 40 })));
   return pos;
@@ -66,7 +66,7 @@ function GraphPage() {
   const { nodes, edges } = useMemo(() => {
     if (!data) return { nodes: [], edges: [] };
     const pos = layout(data);
-    const nodes: Node[] = data.nodes.map((n) => ({ id: n.id, type: "entity", position: pos[n.id], data: { n, selected: sel?.id === n.id } }));
+    const nodes: Node[] = data.nodes.map((n) => ({ id: n.id, type: "entity", position: pos[n.id] ?? { x: 0, y: 0 }, data: { n, selected: sel?.id === n.id } }));
     const edges: Edge[] = data.edges.map((e) => {
       const color = e.suspicious ? "var(--critical)" : "var(--muted-foreground)";
       return {

@@ -41,7 +41,7 @@ export function AppShell({ children }: { children: ReactNode }) {
             <Link
               key={n.label}
               to={n.to}
-              params={"params" in n ? (n.params as never) : undefined}
+              {...("params" in n ? { params: n.params as never } : {})}
               onClick={() => setOpen(false)}
               activeOptions={{ exact: n.to === "/", includeSearch: false }}
               className="flex items-center gap-2.5 rounded-md px-3 py-2 text-sm text-sidebar-foreground transition-colors hover:bg-sidebar-accent"
